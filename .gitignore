@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment / Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Chrome extension artifacts
+*.crx
+*.pem
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Generated icon script (not needed for distribution)
+create-icons.js
+generate-icons.js
+
+# Reddit post (not for repo)
+REDDIT_POST.md
+
+# Gemini artifacts directory
+.gemini/

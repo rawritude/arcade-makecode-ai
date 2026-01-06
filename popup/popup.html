@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MakeCode AI Settings</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <div class="popup-container">
+    <header>
+      <div class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <h1>MakeCode AI</h1>
+      </div>
+      <span class="version">v1.0.0</span>
+    </header>
+
+    <main>
+      <div class="form-group">
+        <label for="apiKey">
+          <span>Google Gemini API Key</span>
+          <a href="https://aistudio.google.com/apikey" target="_blank" class="help-link">Get API Key</a>
+        </label>
+        <div class="input-wrapper">
+          <input type="password" id="apiKey" placeholder="Enter your API key">
+          <button type="button" id="toggleKey" class="toggle-btn" title="Show/Hide">
+            <svg class="eye-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="model">AI Model</label>
+        <select id="model">
+          <option value="gemini-3-flash-preview">Gemini 3 Flash Preview</option>
+        </select>
+      </div>
+
+      <button id="saveBtn" class="save-btn">
+        <span>Save Settings</span>
+      </button>
+
+      <div id="status" class="status"></div>
+    </main>
+
+    <footer>
+      <p>Open <a href="https://arcade.makecode.com" target="_blank">MakeCode Arcade</a> to use the AI assistant</p>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
