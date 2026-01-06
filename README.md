@@ -2,6 +2,8 @@
 
 A Chrome extension that provides AI-powered assistance for MakeCode Arcade projects. Get help with debugging, code explanations, and suggestions directly within the MakeCode editor.
 
+<img width="1906" height="965" alt="image" src="https://github.com/user-attachments/assets/cda2dd75-a714-48b7-8337-00556ce18a6d" />
+
 ## Features
 
 - **Automatic Code Extraction**: Reads your project code from MakeCode's IndexedDB storage
