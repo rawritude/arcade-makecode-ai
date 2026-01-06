@@ -37,7 +37,7 @@ A Chrome extension that provides AI-powered assistance for MakeCode Arcade proje
 
 ### Complexity Levels
 
-| Level | Audience | Description |
+| Level | Description |
 |-------|----------|-------------|
 | 1 | Very simple words, fun analogies, encouraging |
 | 2 | Simple language, basic programming terms |
