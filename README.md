@@ -39,11 +39,11 @@ A Chrome extension that provides AI-powered assistance for MakeCode Arcade proje
 
 | Level | Audience | Description |
 |-------|----------|-------------|
-| 1 | Ages 8-10 | Very simple words, fun analogies, encouraging |
-| 2 | Ages 10-14 | Simple language, basic programming terms |
-| 3 | General | Standard terminology, clear examples |
-| 4 | Intermediate | Technical terms, patterns, optimizations |
-| 5 | Advanced | Concise, expert-level explanations |
+| 1 | Very simple words, fun analogies, encouraging |
+| 2 | Simple language, basic programming terms |
+| 3 | Standard terminology, clear examples |
+| 4 | Technical terms, patterns, optimizations |
+| 5 | Concise, expert-level explanations |
 
 ### Editor Mode Support
 
