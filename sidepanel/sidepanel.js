@@ -6,6 +6,10 @@ let editorMode = 'blocks'; // 'blocks' or 'typescript'
 let messages = [];
 let isStreaming = false;
 let complexity = 3; // Default: balanced
+let isExtracting = false;
+let extractSessionId = 0;
+let latestExtractSessionId = 0;
+let pendingExtractSessionId = null;
 
 // Complexity level labels
 const complexityLabels = {
@@ -52,9 +56,20 @@ async function loadSettings() {
 
 // Extract code from page
 async function extractCode() {
-    codeStatus.textContent = 'Loading...';
-    codeStatus.className = 'code-status';
+    const sessionId = ++extractSessionId;
+    latestExtractSessionId = sessionId;
+    prepareCodeExtractionUI();
 
+    if (isExtracting) {
+        pendingExtractSessionId = sessionId;
+        return;
+    }
+
+    await runExtractCode(sessionId);
+}
+
+async function runExtractCode(sessionId) {
+    isExtracting = true;
     try {
         // Request code extraction from background
         const response = await new Promise((resolve, reject) => {
@@ -66,6 +81,10 @@ async function extractCode() {
                 }
             });
         });
+
+        if (sessionId !== latestExtractSessionId) {
+            return;
+        }
 
         if (response?.success && response.data) {
             projectCode = response.data.mainTs || '';
@@ -98,8 +117,17 @@ async function extractCode() {
             codeStatus.className = 'code-status error';
         }
     } catch (error) {
-        codeStatus.textContent = 'Connection error';
-        codeStatus.className = 'code-status error';
+        if (sessionId === latestExtractSessionId) {
+            codeStatus.textContent = 'Connection error';
+            codeStatus.className = 'code-status error';
+        }
+    } finally {
+        isExtracting = false;
+        if (pendingExtractSessionId) {
+            const nextSessionId = pendingExtractSessionId;
+            pendingExtractSessionId = null;
+            runExtractCode(nextSessionId);
+        }
     }
 }
 
@@ -163,8 +191,21 @@ function setupEventListeners() {
         } else if (request.action === 'streamError') {
             showError(request.error);
             finishStreaming();
+        } else if (request.action === 'workspaceSessionChanged') {
+            handleWorkspaceSessionChanged();
         }
     });
+}
+
+function handleWorkspaceSessionChanged() {
+    extractCode();
+}
+
+function prepareCodeExtractionUI() {
+    projectCode = '';
+    codeDisplay.textContent = '';
+    codeStatus.textContent = 'Loading...';
+    codeStatus.className = 'code-status';
 }
 
 function setupQuickPrompts() {
