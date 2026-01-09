@@ -29,6 +29,7 @@ const codeStatus = document.getElementById('codeStatus');
 const modelName = document.getElementById('modelName');
 const complexitySlider = document.getElementById('complexitySlider');
 const complexityValue = document.getElementById('complexityValue');
+let workspaceNoticeTimeout;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
@@ -163,6 +164,8 @@ function setupEventListeners() {
         } else if (request.action === 'streamError') {
             showError(request.error);
             finishStreaming();
+        } else if (request.action === 'workspaceSessionChanged') {
+            handleWorkspaceSessionChanged();
         }
     });
 }
@@ -175,6 +178,35 @@ function setupQuickPrompts() {
             sendMessage();
         });
     });
+}
+
+function handleWorkspaceSessionChanged() {
+    messages = [];
+    messagesContainer.innerHTML = getWelcomeHTML();
+    setupQuickPrompts();
+    showWorkspaceNotice('Workspace changed — reloading code…');
+}
+
+function showWorkspaceNotice(message) {
+    const existingNotice = document.getElementById('workspaceNotice');
+    if (existingNotice) {
+        existingNotice.remove();
+    }
+
+    const notice = document.createElement('span');
+    notice.id = 'workspaceNotice';
+    notice.className = 'workspace-note';
+    notice.textContent = message;
+
+    codeStatus.insertAdjacentElement('afterend', notice);
+
+    if (workspaceNoticeTimeout) {
+        clearTimeout(workspaceNoticeTimeout);
+    }
+
+    workspaceNoticeTimeout = setTimeout(() => {
+        notice.remove();
+    }, 4000);
 }
 
 // Send message
