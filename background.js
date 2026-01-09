@@ -3,60 +3,64 @@
 
 const MAKECODE_DB = '__pxt_idb_workspace_arcade___default';
 
-// Open side panel when extension icon is clicked
-chrome.action.onClicked.addListener((tab) => {
-  if (tab.url?.includes('arcade.makecode.com')) {
-    chrome.sidePanel.open({ tabId: tab.id });
-  }
-});
+const hasChromeRuntime = typeof chrome !== 'undefined' && chrome.runtime;
 
-// Enable side panel for MakeCode Arcade pages
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (tab.url?.includes('arcade.makecode.com')) {
-    chrome.sidePanel.setOptions({
-      tabId,
-      path: 'sidepanel/sidepanel.html',
-      enabled: true
-    });
-  }
-});
-
-// Message handler
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'openSidePanel') {
-    if (sender.tab?.id) {
-      chrome.sidePanel.open({ tabId: sender.tab.id });
+if (hasChromeRuntime) {
+  // Open side panel when extension icon is clicked
+  chrome.action.onClicked.addListener((tab) => {
+    if (tab.url?.includes('arcade.makecode.com')) {
+      chrome.sidePanel.open({ tabId: tab.id });
     }
-    sendResponse({ success: true });
-    return true;
-  }
+  });
 
-  if (request.action === 'streamToGemini') {
-    handleGeminiStream(request.messages, request.code, request.complexity, request.editorMode);
-    sendResponse({ success: true, streaming: true });
-    return true;
-  }
+  // Enable side panel for MakeCode Arcade pages
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (tab.url?.includes('arcade.makecode.com')) {
+      chrome.sidePanel.setOptions({
+        tabId,
+        path: 'sidepanel/sidepanel.html',
+        enabled: true
+      });
+    }
+  });
 
-  if (request.action === 'getSettings') {
-    chrome.storage.sync.get(['apiKey', 'model', 'complexity'], (result) => {
-      sendResponse(result);
-    });
-    return true;
-  }
+  // Message handler
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'openSidePanel') {
+      if (sender.tab?.id) {
+        chrome.sidePanel.open({ tabId: sender.tab.id });
+      }
+      sendResponse({ success: true });
+      return true;
+    }
 
-  if (request.action === 'saveComplexity') {
-    chrome.storage.sync.set({ complexity: request.complexity });
-    sendResponse({ success: true });
-    return true;
-  }
+    if (request.action === 'streamToGemini') {
+      handleGeminiStream(request.messages, request.code, request.complexity, request.editorMode);
+      sendResponse({ success: true, streaming: true });
+      return true;
+    }
 
-  if (request.action === 'doExtractCode') {
-    handleExtractCode()
-      .then(data => sendResponse({ success: true, data }))
-      .catch(error => sendResponse({ success: false, error: error.message }));
-    return true;
-  }
-});
+    if (request.action === 'getSettings') {
+      chrome.storage.sync.get(['apiKey', 'model', 'complexity'], (result) => {
+        sendResponse(result);
+      });
+      return true;
+    }
+
+    if (request.action === 'saveComplexity') {
+      chrome.storage.sync.set({ complexity: request.complexity });
+      sendResponse({ success: true });
+      return true;
+    }
+
+    if (request.action === 'doExtractCode') {
+      handleExtractCode()
+        .then(data => sendResponse({ success: true, data }))
+        .catch(error => sendResponse({ success: false, error: error.message }));
+      return true;
+    }
+  });
+}
 
 // Extract code using chrome.scripting in MAIN world
 async function handleExtractCode() {
@@ -320,4 +324,10 @@ async function handleGeminiStream(messages, code, complexity = 3, editorMode = '
       error: error.message
     });
   }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    buildSystemPrompt
+  };
 }

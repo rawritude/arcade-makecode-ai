@@ -1,0 +1,10 @@
+{
+  "name": "arcade-makecode-ai",
+  "version": "1.0.0",
+  "description": "Tests for MakeCode Arcade AI Assistant",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --test"
+  }
+}
